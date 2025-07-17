@@ -75,14 +75,42 @@ blogRouter.put("/", async (c) => {
   }
 });
 
-blogRouter.get("/", async (c) => {
+blogRouter.get("/bulk", async (c) => {
+     const prisma = new PrismaClient({
+    datasourceUrl: c.env.DATABASE_URL,
+  }).$extends(withAccelerate());
 
+  let page = parseInt(c.req.query("page") || "1")
+  let limit = parseInt(c.req.query("limit") || "10")
+
+  let skip = (page-1) * limit ;
+
+  let totalPosts = await prisma.post.count()
+  
+  const posts = await prisma.post.findMany({
+    skip ,
+    take : limit,
+    orderBy: {
+      createdAt: "desc", 
+    },
+  })
+  return c.json({
+    posts ,
+    totalPosts ,
+    page ,
+    limit,
+    totalPages : Math.ceil(totalPosts/limit)
+  })
+});
+
+blogRouter.get("/:id", async (c) => {
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
 
   try {
-    const id = c.req.query("id");
+    const id = c.req.param("id"); 
+
     const post = await prisma.post.findFirst({
       where: { id },
     });
@@ -97,18 +125,3 @@ blogRouter.get("/", async (c) => {
   }
 });
 
-blogRouter.get("/bulk", async (c) => {
-     const prisma = new PrismaClient({
-    datasourceUrl: c.env.DATABASE_URL,
-  }).$extends(withAccelerate());
-
-  let page = parseInt(c.req.query("page") || "1")
-  let limit = parseInt(c.req.query("limit") || "10")
-
-  let skip = (page-1) * limit ;
-
-  let totalPosts = await prisma.post.count()
-  
-  const posts = await prisma.post.findMany()
-  return c.json({posts})
-});
