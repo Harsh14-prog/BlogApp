@@ -9,11 +9,11 @@ type authProp = {
 };
 
 const Auth = ({ type }: authProp) => {
-  const [postInputs, setPostInputs] = useState<signinInput>({
-    name: "",
-    email: "",
-    password: "",
-  });
+const [postInputs , setPostInputs] = useState <signinInput>({
+  name : "",
+  email : "",
+  password : ""
+})
 
   const navigate = useNavigate();
 
@@ -88,7 +88,7 @@ const Auth = ({ type }: authProp) => {
 
           <button
             onClick={sendRequest}
-            className="w-full mt-4 bg-white text-black py-2 rounded hover:bg-gray-200 transition"
+            className="w-full mt-4 bg-sky-500 text-white py-2 rounded hover:bg-sky-600 transition"
           >
             {type === "signup" ? "Sign Up" : "Login"}
           </button>
