@@ -1,12 +1,13 @@
 import { Appbar } from "../component/Appbar";
 import { BlogCard } from "../component/BlogCard";
 import { useBlogs } from "../hooks/index";
+import {BlogCardSkeleton} from "../component/BlogCardSkeleton";
 
 const Blogs = () => {
   const { blogs, loading, page, setPage, totalBlogs } = useBlogs();
 
   interface Blog {
-    id: string;
+    id: number;
     author: {
       name: string;
     };
@@ -15,10 +16,19 @@ const Blogs = () => {
     createdAt: string;
   }
 
-  const totalPages = Math.ceil(totalBlogs / 5); // assuming limit=5
+  const totalPages = Math.ceil(totalBlogs / 5);
 
   return loading ? (
-    <div>Loading Blogs....</div>
+    <div className="min-h-screen bg-[#0f172a] text-white">
+      <Appbar />
+      <div className="px-6 py-12 max-w-3xl mx-auto space-y-8">
+        {Array(5)
+          .fill(0)
+          .map((_, index) => (
+            <BlogCardSkeleton key={index} />
+          ))}
+      </div>
+    </div>
   ) : (
     <div className="min-h-screen bg-[#0f172a] text-white">
       <Appbar />
@@ -27,10 +37,11 @@ const Blogs = () => {
           {blogs.map((item: Blog) => (
             <BlogCard
               key={item.id}
-              authorName={item.author?.name || "Unknown"}
+              id={item.id}
+              authorName={item.author?.name || "Anonymous"}
               title={item.title}
               content={item.content}
-              publishedDate={new Date(item.createdAt).toDateString()} 
+              publishedDate={new Date(item.createdAt).toDateString()}
             />
           ))}
         </div>
