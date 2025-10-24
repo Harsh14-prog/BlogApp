@@ -22,7 +22,7 @@ A modern blog platform built with **React**, **Tailwind CSS**, **Hono (Edge Back
 | Frontend        | Backend        | Database   | Auth           | ORM     |
 |----------------|----------------|------------|----------------|---------|
 | React + Vite   | Hono (Edge)    | PostgreSQL | JWT + bcryptjs | Prisma  |
-| Tailwind CSS   | Hono Router    |            | Zod            |         |
+| Tailwind CSS   | Typescript   |            | Zod            |         |
 
 ---
 
